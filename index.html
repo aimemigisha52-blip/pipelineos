@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PipelineOS — Pipeline Commercial IA pour SaaS B2B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #04040a;
+  --surface: #0c0c18;
+  --surface2: #11111f;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --border3: rgba(255,255,255,0.15);
+  --accent: #6c5ce7;
+  --accent-light: #a29bfe;
+  --accent-glow: rgba(108,92,231,0.4);
+  --green: #00d68f;
+  --green-dim: rgba(0,214,143,0.12);
+  --gold: #ffd32a;
+  --red: #ff4757;
+  --cyan: #18dcff;
+  --text: #f0f0fa;
+  --text2: #8888aa;
+  --text3: #44445a;
+  --sans: 'Bricolage Grotesque', sans-serif;
+  --display: 'Syne', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 56px;
+  height: 72px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(4,4,10,0.75);
+  backdrop-filter: blur(24px);
+}
+
+.nav-left { display: flex; align-items: center; gap: 48px; }
+
+.logo {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.nav-links { display: flex; gap: 32px; list-style: none; }
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  letter-spacing: -0.2px;
+}
+
+.nav-cta:hover {
+  background: var(--accent-light);
+  transform: scale(1.04);
+  box-shadow: 0 0 32px var(--accent-glow);
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 48px 80px;
+  text-align: center;
+  z-index: 2;
+}
+
+.hero-glow {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(108,92,231,0.16) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-glow-2 {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(0,214,143,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(108,92,231,0.1);
+  border: 1px solid rgba(108,92,231,0.25);
+  border-radius: 100px;
+  padding: 6px 18px 6px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.eyebrow-new {
+  background: var(--green);
+  color: #001a0e;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  position: relative;
+}
+
+.pulse::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--green);
+  opacity: 0.3;
+  animation: ring 2s ease-out infinite;
+}
+
+@keyframes ring {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.hero-h1 {
+  font-family: var(--display);
+  font-size: clamp(52px, 8vw, 104px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -4px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.08s both;
+}
+
+.h1-plain { display: block; color: var(--text); }
+.h1-outline { display: block; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.25); }
+.h1-grad {
+  display: block;
+  background: linear-gradient(135deg, var(--accent-light), var(--green) 50%, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--text2);
+  max-width: 500px;
+  line-height: 1.65;
+  margin-bottom: 48px;
+  animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.16s both;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.24s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 17px 36px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.3px;
+  background: linear-gradient(135deg, var(--accent), #9b59b6);
+  color: white;
+  box-shadow: 0 4px 24px rgba(108,92,231,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(108,92,231,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 17px 36px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.3px;
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover { color: var(--text); border-color: var(--border3); transform: translateY(-2px); }
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(12,12,24,0.8);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  margin-top: 72px;
+  animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.32s both;
+}
+
+.hstat {
+  flex: 1;
+  padding: 24px 36px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+
+.hstat:last-child { border-right: none; }
+
+.hstat-val {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  display: block;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.hstat-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* SECTIONS */
+.section { position: relative; z-index: 2; padding: 120px 56px; }
+.inner { max-width: 1120px; margin: 0 auto; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+
+.chip::before { content: ''; width: 28px; height: 1px; background: var(--text3); }
+
+.sh2 {
+  font-family: var(--display);
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -2.5px;
+  line-height: 1.05;
+  margin-bottom: 56px;
+}
+
+/* PROBLEMS */
+.pb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.pb-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pb-head {
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  display: inline-block;
+}
+
+.tag-r { background: rgba(255,71,87,0.1); color: var(--red); border: 1px solid rgba(255,71,87,0.2); }
+.tag-g { background: rgba(0,214,143,0.08); color: var(--green); border: 1px solid rgba(0,214,143,0.2); }
+
+.pb-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.pb-item:last-child { border-bottom: none; }
+.pb-item:hover { background: var(--surface2); }
+
+.pb-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ico-r { background: rgba(255,71,87,0.1); }
+.ico-g { background: rgba(0,214,143,0.08); }
+
+.pb-item strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.2px; }
+.pb-item span { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+/* HOW */
+.how-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.how-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s;
+}
+
+.how-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.how-card:nth-child(1)::after { background: linear-gradient(90deg, transparent, var(--accent-light), transparent); }
+.how-card:nth-child(2)::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+.how-card:nth-child(3)::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.how-card:nth-child(4)::after { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+
+.how-card:hover { transform: translateY(-6px); border-color: var(--border2); }
+
+.step-num { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+.step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.how-card:nth-child(1) .step-icon { background: rgba(108,92,231,0.12); }
+.how-card:nth-child(2) .step-icon { background: rgba(0,214,143,0.08); }
+.how-card:nth-child(3) .step-icon { background: rgba(255,211,42,0.08); }
+.how-card:nth-child(4) .step-icon { background: rgba(24,220,255,0.08); }
+
+.how-title { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+.how-desc { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+/* PRICING */
+.pricing-wrap { max-width: 660px; margin: 0 auto; }
+
+.pc {
+  background: var(--surface);
+  border: 1px solid rgba(108,92,231,0.22);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.pc::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--green), transparent);
+}
+
+.pc-glow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(108,92,231,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.pc-head {
+  padding: 48px 56px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.pc-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.pc-price {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.pc-cur {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text2);
+  margin-top: 14px;
+}
+
+.pc-amt {
+  font-family: var(--display);
+  font-size: 88px;
+  font-weight: 800;
+  letter-spacing: -4px;
+  line-height: 1;
+}
+
+.pc-per {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.pilot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-dim);
+  border: 1px solid rgba(0,214,143,0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.pc-body { padding: 40px 56px 48px; }
+
+.pc-feats {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.pc-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.feat-ck {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: var(--green-dim);
+  border: 1px solid rgba(0,214,143,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--green);
+}
+
+.pc-cta {
+  display: block;
+  text-align: center;
+  padding: 18px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--accent), #9b59b6);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.3px;
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 4px 24px rgba(108,92,231,0.3);
+  margin-bottom: 20px;
+}
+
+.pc-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(108,92,231,0.5); }
+
+.pc-note {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* ABOUT */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.about-desc {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.8;
+  margin-bottom: 36px;
+}
+
+.sig {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sig-av {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+}
+
+.sig-name { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+.sig-role { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 1px; margin-top: 3px; text-transform: uppercase; }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.metric-val {
+  font-family: var(--display);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.metric-lbl { font-size: 13px; color: var(--text2); line-height: 1.45; }
+
+/* FINAL CTA */
+.fcta {
+  position: relative;
+  z-index: 2;
+  padding: 120px 56px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.fcta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+}
+
+.fcta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(108,92,231,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.fcta-h2 {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1.0;
+  margin-bottom: 20px;
+}
+
+.grad-text {
+  background: linear-gradient(135deg, var(--accent-light), var(--green) 50%, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fcta-sub {
+  font-size: 18px;
+  color: var(--text2);
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+
+/* FOOTER */
+footer {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--border);
+  padding: 40px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.fl { display: flex; align-items: center; gap: 20px; }
+.fl-logo { font-family: var(--display); font-size: 17px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); text-decoration: none; }
+.fl-sep { color: var(--text3); }
+.fl-tag { font-size: 13px; color: var(--text3); }
+.fr { display: flex; align-items: center; gap: 28px; }
+.fr a { font-size: 13px; color: var(--text2); text-decoration: none; transition: color 0.2s; }
+.fr a:hover { color: var(--text); }
+.fr-copy { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+/* HR */
+.hr { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); position: relative; z-index: 2; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 120px 24px 64px; }
+  .hero-stats { flex-direction: column; border-radius: 12px; }
+  .hstat { border-right: none; border-bottom: 1px solid var(--border); }
+  .hstat:last-child { border-bottom: none; }
+  .section { padding: 80px 24px; }
+  .pb-grid, .how-grid, .about-grid, .metrics-grid { grid-template-columns: 1fr; }
+  .pc-feats { grid-template-columns: 1fr; }
+  .pc-head, .pc-body { padding-inline: 28px; }
+  .fcta { padding: 80px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<div class="noise"></div>
+
+<nav>
+  <div class="nav-left">
+    <a href="#" class="logo">
+      <div class="logo-mark">⚡</div>
+      PipelineOS
+    </a>
+    <ul class="nav-links">
+      <li><a href="#probleme">Pourquoi nous</a></li>
+      <li><a href="#comment">Comment ça marche</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+    </ul>
+  </div>
+  <a href="https://calendly.com/aimemigisha52/decouverte-pipelineos" class="nav-cta" target="_blank">
+    Réserver un appel →
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-eyebrow">
+    <span class="pulse"></span>
+    <span class="eyebrow-new">NOUVEAU</span>
+    Système IA · SaaS B2B · Europe
+  </div>
+
+  <h1 class="hero-h1">
+    <span class="h1-plain">Votre pipeline</span>
+    <span class="h1-outline">commercial</span>
+    <span class="h1-grad">en automatique.</span>
+  </h1>
+
+  <p class="hero-sub">
+    PipelineOS génère des meetings qualifiés pour les fondateurs SaaS B2B — sans SDR, sans prospection manuelle, sans effort.
+  </p>
+
+  <div class="hero-btns">
+    <a href="https://calendly.com/aimemigisha52/decouverte-pipelineos" class="btn-primary" target="_blank">
+      Réserver un appel gratuit →
+    </a>
+    <a href="#comment" class="btn-ghost">
+      Comment ça marche
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <span class="hstat-val" style="color:var(--green)">8–12</span>
+      <span class="hstat-lbl">Meetings / mois</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-val" style="color:var(--accent-light)">100%</span>
+      <span class="hstat-lbl">Automatisé</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-val" style="color:var(--gold)">0</span>
+      <span class="hstat-lbl">SDR requis</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-val" style="color:var(--cyan)">48h</span>
+      <span class="hstat-lbl">Pour démarrer</span>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<section class="section" id="probleme">
+  <div class="inner">
+    <div class="reveal">
+      <div class="chip">Le problème</div>
+      <h2 class="sh2">Vous avez un super produit.<br>Pas assez de clients.</h2>
+    </div>
+    <div class="pb-grid reveal d1">
+      <div class="pb-col">
+        <div class="pb-head"><span class="tag tag-r">Avant PipelineOS</span></div>
+        <div class="pb-item">
+          <div class="pb-ico ico-r">⏰</div>
+          <div><strong>Prospection manuelle chronophage</strong><span>Des heures perdues à chercher des prospects pendant que votre produit attend.</span></div>
+        </div>
+        <div class="pb-item">
+          <div class="pb-ico ico-r">💸</div>
+          <div><strong>SDR à £3,000–5,000/mois</strong><span>Recruter, former, manager. Des mois avant les premiers résultats.</span></div>
+        </div>
+        <div class="pb-item">
+          <div class="pb-ico ico-r">📉</div>
+          <div><strong>Pipeline imprévisible</strong><span>Certains mois bons, d'autres catastrophiques. Impossible de planifier.</span></div>
+        </div>
+      </div>
+      <div class="pb-col">
+        <div class="pb-head"><span class="tag tag-g">Avec PipelineOS</span></div>
+        <div class="pb-item">
+          <div class="pb-ico ico-g">🤖</div>
+          <div><strong>Pipeline en pilote automatique</strong><span>L'IA trouve vos prospects, écrit les emails, relance. Vous closez.</span></div>
+        </div>
+        <div class="pb-item">
+          <div class="pb-ico ico-g">💰</div>
+          <div><strong>Résultats dès la semaine 1</strong><span>Sans recrutement, sans CDI, sans risque. Un système 24h/7j.</span></div>
+        </div>
+        <div class="pb-item">
+          <div class="pb-ico ico-g">📈</div>
+          <div><strong>8 à 12 meetings qualifiés/mois</strong><span>Garanti. Des prospects qui correspondent exactement à votre ICP.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<section class="section" id="comment">
+  <div class="inner">
+    <div class="reveal">
+      <div class="chip">Comment ça marche</div>
+      <h2 class="sh2">4 étapes.<br>Zéro effort de votre côté.</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="step-num">Étape 01</div>
+        <div class="step-icon">🎯</div>
+        <div class="how-title">Identification des prospects</div>
+        <div class="how-desc">Notre IA analyse votre ICP et identifie automatiquement vos prospects idéaux parmi des milliers d'entreprises SaaS européennes. Score de fit en temps réel.</div>
+      </div>
+      <div class="how-card reveal d1">
+        <div class="step-num">Étape 02</div>
+        <div class="step-icon">✍️</div>
+        <div class="how-title">Emails hyper-personnalisés</div>
+        <div class="how-desc">Claude AI rédige un email unique pour chaque prospect — basé sur son secteur, sa taille, ses signaux d'achat récents. Zéro template générique.</div>
+      </div>
+      <div class="how-card reveal d2">
+        <div class="step-num">Étape 03</div>
+        <div class="step-icon">⚡</div>
+        <div class="how-title">Envoi & relances automatiques</div>
+        <div class="how-desc">Les emails partent automatiquement au bon moment. Les relances aussi. Chaque séquence est optimisée par les données de campagnes précédentes.</div>
+      </div>
+      <div class="how-card reveal d3">
+        <div class="step-num">Étape 04</div>
+        <div class="step-icon">📅</div>
+        <div class="how-title">Meetings dans votre agenda</div>
+        <div class="how-desc">Les prospects intéressés bookent directement. Vous recevez une notification. Vous vous présentez au call. C'est tout ce qu'on vous demande.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<section class="section" id="tarifs">
+  <div class="inner">
+    <div class="reveal" style="text-align:center">
+      <div class="chip" style="justify-content:center">Tarifs</div>
+      <h2 class="sh2" style="text-align:center">Simple. Transparent.<br>Sans surprise.</h2>
+    </div>
+    <div class="pricing-wrap reveal d1">
+      <div class="pc">
+        <div class="pc-glow"></div>
+        <div class="pc-head">
+          <div class="pc-lbl">Abonnement mensuel · Sans engagement</div>
+          <div class="pc-price">
+            <span class="pc-cur">£</span>
+            <span class="pc-amt">1,800</span>
+          </div>
+          <div class="pc-per">par mois</div>
+          <div class="pilot-badge">🌱 Pilot gratuit disponible · 30 jours d'essai</div>
+        </div>
+        <div class="pc-body">
+          <ul class="pc-feats">
+            <li class="pc-feat"><span class="feat-ck">✓</span>8 à 12 meetings qualifiés / mois</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Prospection IA automatique</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Emails personnalisés Claude AI</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Séquences de relance auto</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Dashboard reporting temps réel</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Intégration CRM (HubSpot / SF)</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Support dédié 5j/7</li>
+            <li class="pc-feat"><span class="feat-ck">✓</span>Résultats sous 30 jours garantis</li>
+          </ul>
+          <a href="https://calendly.com/aimemigisha52/decouverte-pipelineos" class="pc-cta" target="_blank">
+            Démarrer maintenant →
+          </a>
+          <div class="pc-note">🔒 Remboursé si aucun meeting en 30 jours · Aucune carte requise</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<section class="section" id="a-propos">
+  <div class="inner">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="chip">À propos</div>
+        <h2 class="sh2" style="margin-bottom:24px">Construit par un fondateur,<br>pour des fondateurs.</h2>
+        <p class="about-desc">PipelineOS est né d'un constat simple : les meilleures startups SaaS échouent non pas par manque de produit, mais par manque de pipeline. J'ai construit ce système pour résoudre exactement ce problème — une infrastructure commerciale complète, pilotée par l'IA, accessible sans recruter une seule personne.</p>
+        <div class="sig">
+          <div class="sig-av">A</div>
+          <div>
+            <div class="sig-name">Aime Migisha</div>
+            <div class="sig-role">Fondateur, PipelineOS · Dundee, Scotland</div>
+          </div>
+        </div>
+      </div>
+      <div class="metrics-grid reveal d1">
+        <div class="metric">
+          <span class="metric-val" style="color:var(--green)">8–12</span>
+          <div class="metric-lbl">Meetings qualifiés générés par mois en moyenne</div>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:var(--accent-light)">48h</span>
+          <div class="metric-lbl">Délai moyen pour les premières réponses prospects</div>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:var(--gold)">£0</span>
+          <div class="metric-lbl">Coût de recrutement commercial pour nos clients</div>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:var(--cyan)">IA</span>
+          <div class="metric-lbl">Claude AI pour chaque email — zéro template générique</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<section class="fcta">
+  <div class="fcta-glow"></div>
+  <div class="reveal">
+    <h2 class="fcta-h2">
+      Prêt à remplir<br>
+      <span class="grad-text">votre pipeline ?</span>
+    </h2>
+    <p class="fcta-sub">Un appel de 15 minutes. Gratuit. Sans engagement.</p>
+    <a href="https://calendly.com/aimemigisha52/decouverte-pipelineos" class="btn-primary" target="_blank" style="font-size:16px; padding:20px 48px;">
+      Réserver mon appel gratuit →
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">
+    <a href="#" class="fl-logo">PipelineOS</a>
+    <span class="fl-sep">·</span>
+    <span class="fl-tag">Pipeline commercial IA pour SaaS B2B</span>
+  </div>
+  <div class="fr">
+    <a href="mailto:aime@pipelineoscom.com">aime@pipelineoscom.com</a>
+    <a href="https://linkedin.com/in/aime-migisha-791a43355" target="_blank">LinkedIn</a>
+    <span class="fr-copy">© 2026 PipelineOS</span>
+  </div>
+</footer>
+
+<script>
+// Particle canvas
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function init() {
+  particles = [];
+  const n = Math.floor(window.innerWidth / 16);
+  for (let i = 0; i < n; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.1 + 0.15,
+      vx: (Math.random() - 0.5) * 0.12,
+      vy: (Math.random() - 0.5) * 0.12,
+      a: Math.random() * 0.35 + 0.04,
+      c: Math.random() > 0.65 ? '#6c5ce7' : Math.random() > 0.5 ? '#00d68f' : '#ffffff'
+    });
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.globalAlpha = p.a;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+
+resize(); init(); draw();
+window.addEventListener('resize', () => { resize(); init(); });
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Nav effect
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.background =
+    window.scrollY > 40 ? 'rgba(4,4,10,0.92)' : 'rgba(4,4,10,0.75)';
+});
+</script>
+</body>
+</html>
